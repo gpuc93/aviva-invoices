@@ -15,12 +15,15 @@ import { visuallyHidden } from '@mui/utils';
 import AddIcon from '@mui/icons-material/Add';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import timezone from "dayjs/plugin/timezone";
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import InvoiceMenu from '../components/invoiceMenu';
 import '../assets/css/invoiceList.css'
 
 dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Column {
   id: 'customerToFullName' | 'creationTime' | 'dueDateTime' | 'amount' | 'status' | 'options';
@@ -59,8 +62,9 @@ const columns: readonly Column[] = [
 ];
 
 export default function InvoiceList() {
+  const defaultRowsPerPage = 5;
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(defaultRowsPerPage);
   const [invoices, setInvoices] = React.useState<Invoice[]>([]);
   const [invoicesTotalCount, setInvoicesTotalCount] = React.useState<InvoiceResponseDto["totalRows"]>(0);
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
@@ -71,21 +75,21 @@ export default function InvoiceList() {
   const [searchFilter, setSearchFilter] = React.useState('');
   const [startDateFilter, setStartDateFilter] = React.useState<Dayjs | null>();
   const [endDateFilter, setEndDateFilter] = React.useState<Dayjs | null>();
+  const [refreshKey, setRefreshKey] = React.useState(0);
+  const [clearFilterAvailable, setClearFilterAvailable] = React.useState<boolean>(false);
 
 
   React.useEffect(() => {
     getInvoices();
-  }, [page, rowsPerPage, statusFilter]);
+  }, [page, rowsPerPage, refreshKey]);
 
   React.useEffect(()=>{
     getStatus();
   },[])
 
   const getInvoices = async () => {
-
-
     const data: InvoiceResponseDto = await invoiceApi.searchInvoices({ 
-        filter: searchFilter, 
+        search: searchFilter, 
         top: rowsPerPage, 
         skip: (page * rowsPerPage),
         status: statusFilter,
@@ -168,32 +172,37 @@ export default function InvoiceList() {
     };
 
     const formatDateAndTime = (dateString: string): { date: string; time: string } => {
-        const date = new Date(dateString);
+        const localDate = dayjs.utc(dateString).local();
 
-        const day = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(date);
-        const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
-        const year = new Intl.DateTimeFormat("en-US", { year: "numeric" }).format(date);
+        const formattedDate = localDate.format("D MMM YYYY"); 
+        const formattedTime = localDate.format("h:mm a");
 
-        const formattedDate = `${day} ${month} ${year}`;
-      
-        const formattedTime = new Intl.DateTimeFormat("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        }).format(date);
-      
         return {
-          date: formattedDate,
-          time: formattedTime,
+            date: formattedDate,
+            time: formattedTime,
         };
-      }
+    };
+
 
       const handleChangeStatusFilter = (event: SelectChangeEvent) => {
         setStatusFilter(event.target.value);
       };
 
       const handleSearch = () => {
-        getInvoices()
+        setPage(0);
+        setRowsPerPage(defaultRowsPerPage);
+        setRefreshKey(prev => prev + 1);
+        setClearFilterAvailable(true)
+      }
+
+      const handleClearSearch = () => {
+        setStatusFilter('');
+        setSearchFilter('')
+        setStartDateFilter(null)
+        setEndDateFilter(null)
+        setRowsPerPage(defaultRowsPerPage);
+        setRefreshKey(prev => prev + 1);
+        setClearFilterAvailable(false)
       }
 
   return (
@@ -208,31 +217,31 @@ export default function InvoiceList() {
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
     <div className='invli__filter--content'>
     <FormControl className='invli__filter--btn' sx={{ m: 1}}>
-        <InputLabel id="demo-simple-select-label">Estatus</InputLabel>
+        <InputLabel id="filter-status-label" className='invli__filter--label'>Estatus</InputLabel>
         <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="filter-status-label"
+            id="filter-status"
             value={statusFilter}
             label="Estatus"
             onChange={handleChangeStatusFilter}
         >
           {statusList.length > 0 && statusList.map((statusItem)=> (
             <MenuItem className='invli__menu--item' key={statusItem.value} value={statusItem.value}>
-                <span className='invli__filter--label'>{statusItem.text}</span>
+                <span>{statusItem.text}</span>
             </MenuItem>
           ))}
         </Select>
       </FormControl>
       
-    <FormControl className='invli__filter--btn' sx={{ m: 1 }}>
-        <DesktopDatePicker label="Fecha inicio" value={startDateFilter} onChange={(newValue) => setStartDateFilter(newValue)} />
+    <FormControl className='invli__filter--btn'>
+        <DesktopDatePicker className='invli__filter--date' format='DD-MM-YYYY' label="Fecha inicio" value={startDateFilter} onChange={(newValue) => setStartDateFilter(newValue)} />
       </FormControl>
 
-      <FormControl className='invli__filter--btn' sx={{ m: 1 }}>
-        <DesktopDatePicker label="Fecha fin" value={endDateFilter} onChange={(newValue) => setEndDateFilter(newValue)} />
+      <FormControl className='invli__filter--btn'>
+        <DesktopDatePicker className='invli__filter--date' format='DD-MM-YYYY' label="Fecha fin" value={endDateFilter} onChange={(newValue) => setEndDateFilter(newValue)} />
       </FormControl>
 
-      <FormControl className='invli__search--content' sx={{ m: 1, width: '25ch' }} variant="outlined">
+      <FormControl className='invli__search--content' variant="outlined">
           <OutlinedInput
             id="outlined-adornment-weight"
             startAdornment={<InputAdornment position="end"><SearchIcon/></InputAdornment>}
@@ -240,15 +249,27 @@ export default function InvoiceList() {
             inputProps={{
               'aria-label': 'weight',
             }}
+            value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             placeholder='Buscar por cliente o número de factura...'
           />
         </FormControl>
-      <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+
+        {clearFilterAvailable && (
+            <FormControl variant="outlined">
+                <Button className='invli__clear--btn' variant="outlined" size="large" title='Limpiar busqueda' onClick={handleClearSearch}>
+                    <ClearIcon/>
+                </Button>
+            </FormControl>
+        )}
+        
+      <FormControl variant="outlined">
         <Button className='invli__search--btn' variant="contained" size="large" onClick={handleSearch}>
           Buscar
         </Button>
+        
         </FormControl>
+      
       
     </div>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -287,7 +308,7 @@ export default function InvoiceList() {
             {sortedInvoices
               .map((row: Invoice, index) => {
                 const { date: dateStart, time: timeStart } = formatDateAndTime(row.creationTime);
-                const { date:dateEnd, time:timeEnd } = formatDateAndTime(row.creationTime);
+                const { date:dateEnd, time:timeEnd } = formatDateAndTime(row.dueDateTime);
                 return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={`${row.id || 'row'}-${index}`}>
                   <TableCell className='invli__profile--cell'>
@@ -300,6 +321,7 @@ export default function InvoiceList() {
                     </div>
                   </TableCell>
                   <TableCell>
+                    {/*<TableCell>{JSON.stringify(row)}</TableCell>*/}
                     <div className='invli__profile--details'>
                         <label className='invli__profile--date' htmlFor={dateStart}>{dateStart}</label>
                         <label className='invli__profile--time' htmlFor={timeStart}>{timeStart}</label>
@@ -340,7 +362,7 @@ export default function InvoiceList() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Filas por pagina"
+        labelRowsPerPage="Filas por página"
         slotProps={{
             actions: {
               nextButton: { disabled: !hasMore },

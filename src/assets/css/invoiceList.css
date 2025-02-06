@@ -46,20 +46,28 @@
 }
 
 .invli__filter--label {
-    color: #9eaab5;
+    color: #9eaab5 !important;
+}
+
+.invli__filter--date :is(label, button) {
+    color: #9eaab5 !important;
 }
 
 .invli__filter--content {
     display: flex;
     align-items: center;
+    column-gap: 15px;
+    padding: 17px;
 }
 
 .invli__search--content {
-    width: 100% !important;
+    flex: auto !important;
 }
 
 .invli__filter--btn {
-    min-width: 185px !important;
+    min-width: 157px !important;
+    max-width: 157px !important;
+    margin: 0 !important;
 }
 
 .invli__filter--btn div {
@@ -72,5 +80,10 @@
     width: fit-content;
 }
 
+.invli__clear--btn {
+    height: 48px;
+    gap: 0 !important;
+    border: none !important;
+}
 
 

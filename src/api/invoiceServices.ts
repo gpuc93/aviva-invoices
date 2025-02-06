@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL
 const apikey = import.meta.env.VITE_API_KEY; 
 
 interface InvoiceSearchParams {
-  filter: string;
+  search: string;
   top?: number; 
   skip?: number;
   status?: string
@@ -16,7 +16,7 @@ interface InvoiceSearchParams {
 
 export const invoiceApi = {
   async searchInvoices(params: InvoiceSearchParams) {
-    const { filter, top, skip, status, creationTime, dueDateTime } = params;
+    const { search, top, skip, status, creationTime, dueDateTime } = params;
     const query = new URLSearchParams({
         $top: top?.toString() || '10',
         $skip: skip?.toString() || '0',
@@ -45,9 +45,9 @@ if (dueDateTime) {
         filterQuery += `status eq '${status}'`;
     }
 
-    if (filter) {
+    if (search) {
         if (filterQuery) filterQuery += ' and ';
-        filterQuery += `(contains(tolower(customerToFullName), '${filter.toLowerCase()}') or contains(tolower(no), '${filter.toLowerCase()}'))`;
+        filterQuery += `(contains(tolower(customerToFullName), '${search.toLowerCase()}') or contains(tolower(no), '${search.toLowerCase()}'))`;
 
     }
     
