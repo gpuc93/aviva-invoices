@@ -54,6 +54,22 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+table thead th {
+  background: #f4f6f8 !important;
+}
+
+.banner--title {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  padding-bottom: 55px;
+}
+
+.banner--title h1{
+  font-size: 24px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
