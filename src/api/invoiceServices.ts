@@ -1,6 +1,9 @@
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
+import utc from 'dayjs/plugin/utc';
 import { InvoiceCreate } from "../models/shared-models";
+
+dayjs.extend(utc);
 
 const API_URL = import.meta.env.VITE_API_URL
 const API_KEY = import.meta.env.VITE_API_KEY; 

@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    "types": ["vitest"],
+    "moduleResolution": "node",
+    "strict": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
