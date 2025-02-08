@@ -1,8 +1,9 @@
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
+import { InvoiceCreate } from "../models/shared-models";
 
 const API_URL = import.meta.env.VITE_API_URL
-const apikey = import.meta.env.VITE_API_KEY; 
+const API_KEY = import.meta.env.VITE_API_KEY; 
 
 interface InvoiceSearchParams {
   search: string;
@@ -63,17 +64,17 @@ if (dueDateTime) {
     const queryString = query.toString();
 
     try {
-        const responses = await axios.get(`${API_URL}/Invoice/Search?${queryString}`, {
+        const response = await axios.get(`${API_URL}/Invoice/Search?${queryString}`, {
           headers: {
             'Content-Type': 'application/json',
-            'apikey': apikey,
+            'apikey': API_KEY,
           },
         });
       
-        if (responses.status === 200) {
-            return responses.data;
+        if (response.status === 200) {
+            return response.data;
         } else {
-            console.error(responses.status);
+            console.error(response.status);
             return [];
         }
       } catch (error) {
@@ -84,22 +85,146 @@ if (dueDateTime) {
 
   async statusList() {
     try {
-        const responses = await axios.get(`${API_URL}/Invoice/Status`, {
+        const response = await axios.get(`${API_URL}/Invoice/Status`, {
           headers: {
             'Content-Type': 'application/json',
-            'apikey': apikey,
+            'apikey': API_KEY,
           },
         });
       
-        if (responses.status === 200) {
-            return responses.data;
+        if (response.status === 200) {
+            return response.data;
         } else {
-            console.error(responses.status);
+            console.error(response.status);
             return [];
         }
       } catch (error) {
         console.error(error);
         return [];
       }
+  },
+  async customerList() {
+    try {
+        const response = await axios.get(`${API_URL}/Customer`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': API_KEY,
+          },
+        });
+      
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+  },
+  async categoryServiceList() {
+    try {
+        const response = await axios.get(`${API_URL}/ServiceCategory`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': API_KEY,
+          },
+        });
+      
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+  },
+  async createInvoice(invoiceData: Partial<InvoiceCreate>) {
+    try {
+      const response = await axios.post(`${API_URL}/Invoice`, invoiceData, {
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "text/plain",
+          "apikey": API_KEY,
+        },
+      });
+  
+      if (response.status === 200) {
+        return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+    } catch (error) {
+        console.error(error);
+      return null;
+    }
+  },
+  async updateInvoice(invoiceId:string, invoiceData: Partial<InvoiceCreate>) {
+    try {
+      const response = await axios.patch(`${API_URL}/Invoice/id?id=${invoiceId}`, invoiceData, {
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "text/plain",
+          "apikey": API_KEY,
+        },
+      });
+  
+      if (response.status === 200) {
+        return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+    } catch (error) {
+        console.error(error);
+      return null;
+    }
+  },
+  async getInvoice(invoiceId: string) {
+    try {
+      const response = await axios.get(`${API_URL}/Invoice/${invoiceId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "text/plain",
+          "apikey": API_KEY,
+        },
+      });
+  debugger
+      if (response.status === 200) {
+        return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+    } catch (error) {
+        console.error(error);
+      return null;
+    }
+  },
+  async deleteInvoice(invoiceId:string) {
+    try {
+      const response = await axios.delete(`${API_URL}/Invoice/id?id=${invoiceId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "text/plain",
+          "apikey": API_KEY,
+        },
+      });
+  
+      if (response.status === 200) {
+        return response.data;
+        } else {
+            console.error(response.status);
+            return [];
+        }
+    } catch (error) {
+        console.error(error);
+      return null;
+    }
   },
 };

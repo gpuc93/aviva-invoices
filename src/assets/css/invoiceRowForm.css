@@ -1,0 +1,39 @@
+.invrow__new-row--btn {
+    color: #23cd7d !important;
+    font-weight: bold !important;
+    font-size: 15px;
+}
+
+.invrow__new-row {
+    display: flex !important;
+    column-gap: 15px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.invrow__title {
+    padding-left: 25px !important;
+}
+
+.invrow__new-row td {
+    flex: 1;
+    padding: 0;
+}
+
+.invrow__new-row td:first-child {
+    padding-left: 25px;
+}
+
+.invrow__new-row td:last-child {
+    padding-right: 25px;
+}
+
+.invrow__adornment-disabled p {
+    color: rgba(0, 0, 0, 0.38);
+}
+
+.invrowl__label {
+    color: #9eaab5 !important;
+    font-weight: bold !important;
+    font-size: 15px;
+}

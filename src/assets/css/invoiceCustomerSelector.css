@@ -1,0 +1,33 @@
+.invcustsel__from-to--content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 115px;
+    align-items: flex-start;
+    row-gap: 7px;
+}
+
+.invcustsel__from-to--row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.invcustsel__label {
+    color: #9eaab5;
+    font-weight: bold;
+}
+
+.invcustsel__label--info {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.invcustsel__label--seconday-info {
+    font-size: 14px;
+}
+
+.invcustsel__icon {
+    cursor: pointer;
+}

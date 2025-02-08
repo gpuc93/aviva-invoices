@@ -37,3 +37,40 @@ interface InvoiceDetails {
       }
 
     export type InvoiceStatusType = "Unknown" | "Paid" | "Pending" | "Overdue" | "Draft";
+
+    export interface Customer {
+        id: string;
+        name: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        address: string;
+      }
+
+      export interface CategoryService {
+        id: string;
+        name: string;
+      }
+
+      export interface InvoiceDetail {
+        title: string;
+        description: string;
+        categoryId: string;
+        quantity: number;
+        price: number;
+        creationTime: string;
+        lastModificationTime: string;
+      }
+      
+      export interface InvoiceCreate {
+        customerFromId: string;
+        customerToId: string;
+        customerToFullName: string;
+        shipping: number;
+        discount: number;
+        taxes: number;
+        status: string;
+        details: InvoiceDetail[];
+        dueDateTime: string;
+      }
+      

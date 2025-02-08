@@ -9,8 +9,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { invoiceApi } from '../api/invoiceServices';
-import { Invoice, InvoiceResponseDto, InvoiceStatus, InvoiceStatusType } from '../models/shared-models';
-import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, TableSortLabel } from '@mui/material';
+import { Invoice, InvoiceResponseDto, InvoiceStatusType } from '../models/shared-models';
+import { Box, Button, debounce, FormControl, InputAdornment, OutlinedInput, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import AddIcon from '@mui/icons-material/Add';
 import dayjs, { Dayjs } from 'dayjs';
@@ -21,6 +21,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import InvoiceMenu from '../components/invoiceMenu';
 import '../assets/css/invoiceList.css'
+import InvoiceFieldStatus from '../components/invoiceFieldStatus';
+import { CREATE_INVOICE } from '../utils/pathRoutes';
+import { Link } from 'react-router-dom';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,8 +63,7 @@ const columns: readonly Column[] = [
     align: "right"
   },
 ];
-
-export default function InvoiceList() {
+const InvoiceList: React.FC = () => {
   const defaultRowsPerPage = 5;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(defaultRowsPerPage);
@@ -70,22 +72,19 @@ export default function InvoiceList() {
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Invoice>('name' as keyof Invoice);
   const [hasMore, setHasMore] = React.useState(true);
-  const [statusList, setStatusList] = React.useState<InvoiceStatus[]>([])
+  
   const [statusFilter, setStatusFilter] = React.useState('');
   const [searchFilter, setSearchFilter] = React.useState('');
-  const [startDateFilter, setStartDateFilter] = React.useState<Dayjs | null>();
-  const [endDateFilter, setEndDateFilter] = React.useState<Dayjs | null>();
+  const [startDateFilter, setStartDateFilter] = React.useState<Dayjs | null>(null);
+  const [endDateFilter, setEndDateFilter] = React.useState<Dayjs | null>(null);
   const [refreshKey, setRefreshKey] = React.useState(0);
   const [clearFilterAvailable, setClearFilterAvailable] = React.useState<boolean>(false);
+
 
 
   React.useEffect(() => {
     getInvoices();
   }, [page, rowsPerPage, refreshKey]);
-
-  React.useEffect(()=>{
-    getStatus();
-  },[])
 
   const getInvoices = async () => {
     const data: InvoiceResponseDto = await invoiceApi.searchInvoices({ 
@@ -101,11 +100,6 @@ export default function InvoiceList() {
       setInvoices(data.result);
       setInvoicesTotalCount(data.totalRows);
       setHasMore(data.result.length === rowsPerPage)
-  };
-
-  const getStatus = async () => {
-    const data:InvoiceStatus[] = await invoiceApi.statusList();
-    setStatusList(data)
   };
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -184,15 +178,17 @@ export default function InvoiceList() {
     };
 
 
-      const handleChangeStatusFilter = (event: SelectChangeEvent) => {
-        setStatusFilter(event.target.value);
-      };
+      
 
-      const handleSearch = () => {
-        setPage(0);
+      const handleSearch = (forced:boolean) => {
+        
+        if(!forced) {
+            /**Validation to force the search when deleted an item */
+            setPage(0);
+            setClearFilterAvailable(true)
+        }
         setRowsPerPage(defaultRowsPerPage);
         setRefreshKey(prev => prev + 1);
-        setClearFilterAvailable(true)
       }
 
       const handleClearSearch = () => {
@@ -209,29 +205,15 @@ export default function InvoiceList() {
     <>
     <div className='banner--title'>
         <h1>Lista de facturas</h1>
-        <Button variant="contained" startIcon={<AddIcon />}>
+        <Link to={CREATE_INVOICE}><Button variant="contained" startIcon={<AddIcon />}>
         Nueva Factura
-      </Button>
+      </Button></Link>
       </div>  
     
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
     <div className='invli__filter--content'>
-    <FormControl className='invli__filter--btn' sx={{ m: 1}}>
-        <InputLabel id="filter-status-label" className='invli__filter--label'>Estatus</InputLabel>
-        <Select
-            labelId="filter-status-label"
-            id="filter-status"
-            value={statusFilter}
-            label="Estatus"
-            onChange={handleChangeStatusFilter}
-        >
-          {statusList.length > 0 && statusList.map((statusItem)=> (
-            <MenuItem className='invli__menu--item' key={statusItem.value} value={statusItem.value}>
-                <span>{statusItem.text}</span>
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+        
+    <InvoiceFieldStatus id='filter-status-label' classNameInput='invli__filter--label' classNameBtn="invli__filter--btn" handleSelect={setStatusFilter} value={statusFilter} />
       
     <FormControl className='invli__filter--btn'>
         <DesktopDatePicker className='invli__filter--date' format='DD-MM-YYYY' label="Fecha inicio" value={startDateFilter} onChange={(newValue) => setStartDateFilter(newValue)} />
@@ -241,19 +223,11 @@ export default function InvoiceList() {
         <DesktopDatePicker className='invli__filter--date' format='DD-MM-YYYY' label="Fecha fin" value={endDateFilter} onChange={(newValue) => setEndDateFilter(newValue)} />
       </FormControl>
 
-      <FormControl className='invli__search--content' variant="outlined">
-          <OutlinedInput
-            id="outlined-adornment-weight"
-            startAdornment={<InputAdornment position="end"><SearchIcon/></InputAdornment>}
-            aria-describedby="outlined-weight-helper-text"
-            inputProps={{
-              'aria-label': 'weight',
-            }}
-            value={searchFilter}
-            onChange={(e) => setSearchFilter(e.target.value)}
-            placeholder='Buscar por cliente o número de factura...'
-          />
-        </FormControl>
+        <SearchInput
+        className="invli__search--content"
+        value={searchFilter}
+        onSearch={(value) => setSearchFilter(value)}
+        />
 
         {clearFilterAvailable && (
             <FormControl variant="outlined">
@@ -264,7 +238,7 @@ export default function InvoiceList() {
         )}
         
       <FormControl variant="outlined">
-        <Button className='invli__search--btn' variant="contained" size="large" onClick={handleSearch}>
+        <Button className='invli__search--btn' variant="contained" size="large" onClick={() => handleSearch(false)}>
           Buscar
         </Button>
         
@@ -345,7 +319,7 @@ export default function InvoiceList() {
                    </TableCell>
                    <TableCell>
                     <div className='invli__profile--details flex-end'>
-                    <InvoiceMenu></InvoiceMenu>
+                    <InvoiceMenu handleSearch={handleSearch} invoiceId={row.id}></InvoiceMenu>
                     </div>
                    </TableCell>
                 </TableRow>
@@ -383,7 +357,7 @@ export function StatusInvoiceComponent ({ status }: StatusInvoiceProps) {
         switch (status) {
             case "Paid":
               return {
-                color: "#1b9535",
+                color: "#23cd7d",
                 backgroundColor: "#dbf6e5",
               };
             case "Pending":
@@ -430,3 +404,48 @@ export function StatusInvoiceComponent ({ status }: StatusInvoiceProps) {
         <div className='invli--status' style={generateStatusStyle(status)}><label htmlFor="">{generateStatusLabel(status)}</label></div>
     )
 }
+
+export default InvoiceList;
+
+interface SearchInputProps {
+    onSearch: (value: string) => void;
+    placeholder?: string;
+    delay?: number;
+    className?: string;
+    value: string
+  }
+  
+  export const SearchInput: React.FC<SearchInputProps> = ({ onSearch, placeholder = "Buscar...", delay = 500, className, value }) => {
+    const [searchText, setSearchText] = React.useState("");
+
+    React.useEffect(() => {
+        setSearchText(value)
+    }, [value])
+  
+    const debouncedSearch = React.useMemo(() => debounce(onSearch, delay), [onSearch, delay]);
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSearchText(value);
+      debouncedSearch(value);
+    };
+  
+    return (
+      <FormControl className={className} variant="outlined">
+        <OutlinedInput
+          id="search-input"
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
+          aria-describedby="search-helper-text"
+          inputProps={{ "aria-label": "search" }}
+          value={searchText}
+          onChange={handleChange}
+          placeholder={placeholder}
+        />
+      </FormControl>
+    );
+  };
+  

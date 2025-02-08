@@ -10,16 +10,50 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../assets/css/invoiceMenu.css'
+import { Link } from 'react-router-dom';
+import { UPDATE_INVOICE } from '../utils/pathRoutes';
 
-export default function InvoiceMenu() {
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import { invoiceApi } from '../api/invoiceServices';
+
+interface InvoiceMenuProps {
+  invoiceId: string
+  handleSearch: (forced: boolean) => void
+}
+
+export default function InvoiceMenu({invoiceId, handleSearch}: InvoiceMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleOpenDialogDelete = () => {
+    handleClose()
+    setOpenDialog(true)
+  }
+
+  const handleDelete = async () => {
+    await invoiceApi.deleteInvoice(invoiceId)
+    handleSearch(true);
+    setOpenDialog(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -80,12 +114,17 @@ export default function InvoiceMenu() {
           horizontal: 'right',
         }}
       >
+        <Link to={UPDATE_INVOICE} state={{ invoiceId }}>
         <MenuItem onClick={handleClose}>
+        
+
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
           Editar
+         
         </MenuItem>
+        </Link>
         <Divider 
           sx={{
             borderStyle: 'dashed',
@@ -94,13 +133,58 @@ export default function InvoiceMenu() {
             borderTopWidth: "0"
           }}
         />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleOpenDialogDelete}>
           <ListItemIcon>
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
           Eliminar
         </MenuItem>
       </Menu>
+      <DeleteDialog open={openDialog} handleClose={handleCloseDialog} handleDelete={handleDelete}></DeleteDialog>
+    </React.Fragment>
+  );
+}
+
+interface DeleteDialogProps {
+  open: boolean
+  handleClose: () => void
+  handleDelete: () => void
+}
+
+export function DeleteDialog({open, handleClose, handleDelete}: DeleteDialogProps) {
+  
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  
+
+  return (
+    <React.Fragment>
+      <Dialog
+      className='dfabadsfasudiucasfuhadshfuahdsfuiasihfdiuh'
+      sx={{borderRadius: "10px"}}
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Eliminar"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Estas seguro de eliminar la factura?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus variant="contained" onClick={handleDelete}>
+            Eliminar
+          </Button>
+          <Button  variant="contained" color='error' onClick={handleClose} autoFocus>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }
