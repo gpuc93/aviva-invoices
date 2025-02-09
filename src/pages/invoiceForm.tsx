@@ -9,8 +9,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { INVOCE_LIST, UPDATE_INVOICE } from '../utils/pathRoutes';
 import InvoiceCustomerSelector from '../components/InvoiceCustomerSelector';
-import { CategoryService, Customer, Invoice, InvoiceCreate, InvoiceDetail } from '../models/shared-models';
-import { invoiceApi } from '../api/InvoiceServices';
+import { CategoryService, Invoice, InvoiceCreate, InvoiceDetail } from '../models/shared-models';
+import { invoiceApi } from '../api/invoiceServices';
 import InvoiceRowForm from '../components/InvoiceRowForm';
 import InvoiceFieldStatus from '../components/InvoiceFieldStatus';
 import { FormikTextField } from '../components/FormikTextField';
@@ -65,21 +65,15 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
   
 
   const [invoiceData, setInvoiceData] = React.useState<Partial<Invoice>>();
-  const [customers, setCustomers] = React.useState<Customer[]>([]);
   const [categoryServices, setCategoryServices] = React.useState<CategoryService[]>([]);
   const [subtotal, setSubtotal] = React.useState(0);
   const [total, setTotal] = React.useState(0);
 
   React.useEffect(() => {
-    const getCustomers = async () => {
-      const data: Customer[] = await invoiceApi.customerList();
-      setCustomers(data);
-    };
     const getCategoryServices = async () => {
       const data: CategoryService[] = await invoiceApi.categoryServiceList();
       setCategoryServices(data);
     };
-    getCustomers();
     getCategoryServices()
   }, []);
 
@@ -190,23 +184,18 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
 
       <Paper className='invform--container' sx={{ width: '100%', overflow: 'hidden', borderRadius: "16px" }}>
         <div className="invform__customer-selec--content">
-        {customers.length > 0 && (
-    <>
       <InvoiceCustomerSelector
         isFormik={true}
         name="customerFromId"
         label="De"
-        customers={customers}
       />
       <Divider className="invform__customer--divider" orientation="vertical" variant="middle" flexItem />
       <InvoiceCustomerSelector
         isFormik={true}
         name="customerToId"
         label="Para"
-        customers={customers}
       />
-    </>
-  )}
+
         </div>
 
         <Box

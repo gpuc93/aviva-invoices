@@ -218,27 +218,4 @@ describe("invoiceApi", () => {
             expect(result).toEqual([]);
         });
     });
-
-    describe("customerList", () => {
-        it("Debe obtener la lista de clientes correctamente", async () => {
-            const expectedData = [{ id: "1", name: "John Doe" }];
-
-            mockedAxios.get.mockResolvedValueOnce({
-                status: 200,
-                data: expectedData
-            });
-
-            const result = await invoiceApi.customerList();
-
-            expect(result).toEqual(expectedData);
-        });
-
-        it("Debe retornar una lista vacía si hay error", async () => {
-            mockedAxios.get.mockRejectedValueOnce(new Error("Network error"));
-
-            const result = await invoiceApi.customerList();
-
-            expect(result).toEqual([]);
-        });
-    });
 });

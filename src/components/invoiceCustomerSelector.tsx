@@ -3,15 +3,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import '../assets/css/invoiceCustomerSelector.css';
 import { Customer } from '../models/shared-models';
-
 import { useField, useFormikContext } from 'formik';
 import { Typography } from '@mui/material';
 import CustomerDialog from './CustomerSelectorDialog';
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface InvoiceCustomerProps {
   name: string;
   label: string;
-  customers: Customer[];
   isFormik?: boolean;
   handleSelect?: (customer: Customer) => void;
 }
@@ -19,13 +19,13 @@ interface InvoiceCustomerProps {
 const InvoiceCustomerSelector: React.FC<InvoiceCustomerProps> = ({
   name,
   label,
-  customers,
   isFormik = false,
 }) => {
   const [open, setOpen] = React.useState(false);
 
   const formik = isFormik ? useFormikContext<any>() : null;
   const [field, meta, helpers] = isFormik ? useField(name) : [{} as any, {} as any, {} as any];
+  const { customers, loading, error } = useSelector((state: RootState) => state.customers);
 
   const handleCustomerSelect = (customer: Customer) => {
     if (isFormik && formik) {
@@ -41,6 +41,9 @@ const InvoiceCustomerSelector: React.FC<InvoiceCustomerProps> = ({
   const customerData = isFormik
     ? customers.find((c) => c.id === field.value)
     : null;
+
+    if (loading) return <></>;
+    if (error) return <p>Error: {error}</p>;
 
   return (
     <div className='invcustsel__from-to--content'>

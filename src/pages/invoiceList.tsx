@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { invoiceApi } from '../api/InvoiceServices';
+import { invoiceApi } from '../api/invoiceServices';
 import { Invoice, InvoiceResponseDto, InvoiceStatusType } from '../models/shared-models';
 import { Box, Button, debounce, FormControl, InputAdornment, OutlinedInput, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
