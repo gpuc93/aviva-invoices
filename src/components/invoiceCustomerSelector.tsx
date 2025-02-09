@@ -45,11 +45,10 @@ const InvoiceCustomerSelector: React.FC<InvoiceCustomerProps> = ({
     <div className='invcustsel__from-to--content'>
       <div className='invcustsel__from-to--row'>
         <label className='invcustsel__label'>{label}:</label>
-        {customerData ? (
-          <span className='invcustsel__icon' onClick={() => setOpen(!open)}><EditIcon /></span>
-        ) : (
-          <span className='invcustsel__icon' onClick={() => setOpen(!open)}><AddIcon /></span>
-        )}
+        <span className="invcustsel__icon" onClick={() => setOpen(!open)}>
+          {customerData ? <EditIcon /> : <AddIcon />}
+        </span>
+
       </div>
       <label className='invcustsel__label--info'>{customerData?.name}</label>
       <label className='invcustsel__label--seconday-info'>{customerData?.address}</label>

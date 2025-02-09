@@ -45,7 +45,12 @@ const validationSchema = yup.object().shape({
         description: yup.string().trim(),
         categoryId: yup.string().trim().required('El servicio es obligatorio'),
         quantity: yup.number().typeError('Debe ser un número').min(1, 'Mínimo 1').required('Cantidad requerida'),
-        price: yup.number().typeError('Debe ser un número').min(0, 'No puede ser negativo').required('Precio requerido'),
+        price: yup
+  .number()
+  .typeError("Debe ser un número")
+  .test("is-required", "Precio requerido", (value) => value !== 0)
+  .min(0.01, "No puede ser negativo") // Evita valores negativos y 0
+  .required("Precio requerido"),
         creationTime: yup.string().trim(),
         lastModificationTime: yup.string().trim(),
       })
