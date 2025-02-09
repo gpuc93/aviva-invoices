@@ -1,0 +1,60 @@
+.dialog__customer--item {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    align-items: flex-start !important;
+    width: 100%;
+    padding: 0 !important;
+}
+
+.dialog__customer--item div {
+    margin: 0;
+    width: 100%;
+}
+
+.dialog__customer--item .dialog__customer--btn {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    align-items: flex-start;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.dialog__search--input {
+    padding-bottom: 7px !important;
+    padding-top: 5px !important;
+}
+
+.dialog__search--input svg {
+    color: #9eaab5;
+}
+
+.dialog__search--input div {
+    height: 45px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.dialog__search--input svg {
+    height: 20px;
+}
+
+.dialog__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
+    padding-top: 10px !important;
+}
+
+
+
+.dialog__label--primary span {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.dialog__label--secondary p {
+    color: #9eaab5;
+    font-size: 15px;
+}

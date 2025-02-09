@@ -1,0 +1,7 @@
+.invfield__btn {
+    display: flex !important;
+}
+
+.invfield__btn div {
+    display: flex;
+}

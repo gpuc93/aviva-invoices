@@ -1,0 +1,95 @@
+.invform--container {
+    box-shadow: rgba(73, 73, 73, 0.1) 0px 4px 12px !important;
+}
+
+.invform__field--date {
+    width: 100%;
+}
+
+.invform__banner--titles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.invform__customer-selec--content {
+    display: flex;
+    flex-direction: row;
+    column-gap: 40px;
+    padding: 25px 25px 20px  25px;
+    box-sizing: border-box;
+}
+
+.invform__customer--divider {
+    border-color: #eef3f4 !important;
+}
+
+.invform__form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+}
+
+.invform__row--data-invoice {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    column-gap: 10px;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+.invform__total--content {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    padding: 16px 25px;
+    padding-bottom: 25px;
+    row-gap: 10px;
+}
+
+.invform__total--row {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 5px;
+}
+
+.invform__subtotal--lbl {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 13px;
+    color: #9eaab5;
+    flex: 1;
+}
+
+.invform__subtotal--amount {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 140px;
+}
+
+.invform__total--lbl {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 16px;
+    font-weight: bold;
+    flex: 1;
+}
+
+.invform__total--amount {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 140px;
+}
+
+.invform__footer {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 15px;
+}
