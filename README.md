@@ -1,50 +1,96 @@
-# React + TypeScript + Vite
+# Facturas Aviva API - Documentación
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+Este proyecto proporciona un conjunto de funciones para interactuar con la API de facturas. Incluye funcionalidades como la búsqueda de facturas, la obtención de listas de clientes y estados, la creación, actualización y eliminación de facturas.
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
+- **Vite**
+- **TypeScript**
+- **React**
+- **Material UI**
+- **Axios** para las peticiones HTTP
+- **Dayjs** para el manejo de fechas
+- **Vitest** para pruebas unitarias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalación
+Para instalar las dependencias necesarias, ejecuta:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Configuración
+El proyecto requiere variables de entorno para funcionar correctamente. Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+VITE_API_URL=<URL_DE_LA_API>
+VITE_API_KEY=<TU_API_KEY>
 ```
+
+## Uso
+
+### 1. Búsqueda de facturas
+```ts
+import { invoiceApi } from "./invoiceApi";
+
+const params = {
+  search: "John Doe",
+  top: 5,
+  skip: 0,
+  status: "paid",
+  creationTime: dayjs("2022-01-01T00:00:00"),
+  dueDateTime: dayjs("2022-01-05T00:00:00"),
+};
+
+invoiceApi.searchInvoices(params).then(data => console.log(data));
+```
+
+### 2. Creación de factura
+```ts
+const invoiceData = { amount: 100 };
+
+invoiceApi.createInvoice(invoiceData).then(data => console.log(data));
+```
+
+### 3. Actualización de factura
+```ts
+const invoiceId = "123";
+const updateData = { amount: 150 };
+
+invoiceApi.updateInvoice(invoiceId, updateData).then(data => console.log(data));
+```
+
+### 4. Eliminación de factura
+```ts
+invoiceApi.deleteInvoice("123").then(response => console.log(response));
+```
+
+## Pruebas
+El proyecto cuenta con pruebas unitarias utilizando Vitest. Para ejecutarlas, usa el siguiente comando:
+
+```sh
+npm test
+```
+
+## Estructura del Proyecto
+```
+/src
+  ├── api
+  │   ├── invoiceApi.ts
+  ├── components
+  ├── tests
+  │   ├── invoiceApi.test.ts
+  ├── models
+  ├── App.tsx
+  ├── main.tsx
+```
+
+## Contribución
+Si deseas contribuir al proyecto, asegúrte de seguir los siguientes pasos:
+1. Realizar un fork del repositorio.
+2. Crear una rama con la funcionalidad o corrección.
+3. Enviar un Pull Request para revisión.
+
+## Licencia
+Este proyecto está bajo la licencia MIT.
+
