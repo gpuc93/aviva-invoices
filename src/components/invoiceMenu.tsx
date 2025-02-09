@@ -21,7 +21,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { invoiceApi } from '../api/InvoiceServices';
+import { invoiceApi } from '../api/invoiceServices';
 
 interface InvoiceMenuProps {
   invoiceId: string

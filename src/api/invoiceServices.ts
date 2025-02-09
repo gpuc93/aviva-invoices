@@ -102,26 +102,7 @@ if (dueDateTime) {
         return [];
       }
   },
-  async customerList() {
-    try {
-        const response = await axios.get(`${API_URL}/Customer`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': API_KEY,
-          },
-        });
-      
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            console.error(response.status);
-            return [];
-        }
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
-  },
+
   async categoryServiceList() {
     try {
         const response = await axios.get(`${API_URL}/ServiceCategory`, {
