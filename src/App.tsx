@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import './App.css'
-import InvoiceList from './pages/invoiceList';
-import InvoiceForm from "./pages/invoiceForm";
+import InvoiceList from './pages/InvoiceList';
+import InvoiceForm from "./pages/InvoiceForm";
 import { UPDATE_INVOICE } from "./utils/pathRoutes";
 
 function App() {

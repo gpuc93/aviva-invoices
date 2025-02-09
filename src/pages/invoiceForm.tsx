@@ -8,11 +8,11 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { INVOCE_LIST, UPDATE_INVOICE } from '../utils/pathRoutes';
-import InvoiceCustomerSelector from '../components/invoiceCustomerSelector';
+import InvoiceCustomerSelector from '../components/InvoiceCustomerSelector';
 import { CategoryService, Customer, Invoice, InvoiceCreate, InvoiceDetail } from '../models/shared-models';
-import { invoiceApi } from '../api/invoiceServices';
-import InvoiceRowForm from '../components/invoiceRowForm';
-import InvoiceFieldStatus from '../components/invoiceFieldStatus';
+import { invoiceApi } from '../api/InvoiceServices';
+import InvoiceRowForm from '../components/InvoiceRowForm';
+import InvoiceFieldStatus from '../components/InvoiceFieldStatus';
 import { FormikTextField } from '../components/FormikTextField';
 
 interface InvoiceFormProps {

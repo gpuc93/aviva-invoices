@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 import '../assets/css/invoiceMenu.css'
 import { FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
 import { InvoiceStatus } from '../models/shared-models';
-import { invoiceApi } from '../api/invoiceServices';
+import { invoiceApi } from '../api/InvoiceServices';
 
 interface Props {
   handleSelect: React.Dispatch<React.SetStateAction<string>>
