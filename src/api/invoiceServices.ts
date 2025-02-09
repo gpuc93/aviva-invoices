@@ -24,7 +24,7 @@ export const invoiceApi = {
     const query = new URLSearchParams({
         $top: top?.toString() || '10',
         $skip: skip?.toString() || '0',
-        $orderby: "creationTime"
+        $orderby: "creationTime desc"
     });
     let filterQuery = '';
 
@@ -63,7 +63,7 @@ if (dueDateTime) {
     const queryString = query.toString();
 
     try {
-        const response = await axios.get(`${API_URL}/Invoice/Search?${queryString} desc`, {
+        const response = await axios.get(`${API_URL}/Invoice/Search?${queryString}`, {
           headers: {
             'Content-Type': 'application/json',
             'apikey': API_KEY,

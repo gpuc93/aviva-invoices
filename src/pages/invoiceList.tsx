@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { invoiceApi } from '../api/invoiceServices';
+import { invoiceApi } from '../api/InvoiceServices';
 import { Invoice, InvoiceResponseDto, InvoiceStatusType } from '../models/shared-models';
 import { Box, Button, debounce, FormControl, InputAdornment, OutlinedInput, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
@@ -19,9 +19,9 @@ import timezone from "dayjs/plugin/timezone";
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import InvoiceMenu from '../components/invoiceMenu';
+import InvoiceMenu from '../components/InvoiceMenu';
 import '../assets/css/invoiceList.css'
-import InvoiceFieldStatus from '../components/invoiceFieldStatus';
+import InvoiceFieldStatus from '../components/InvoiceFieldStatus';
 import { CREATE_INVOICE } from '../utils/pathRoutes';
 import { Link } from 'react-router-dom';
 

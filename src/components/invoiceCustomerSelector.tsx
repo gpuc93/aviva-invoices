@@ -3,9 +3,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import '../assets/css/invoiceCustomerSelector.css';
 import { Customer } from '../models/shared-models';
-import CustomerDialog from './customerSelectorDialog';
+
 import { useField, useFormikContext } from 'formik';
 import { Typography } from '@mui/material';
+import CustomerDialog from './CustomerSelectorDialog';
 
 interface InvoiceCustomerProps {
   name: string;
