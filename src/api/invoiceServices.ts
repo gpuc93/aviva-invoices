@@ -60,11 +60,6 @@ if (dueDateTime) {
         query.append("$filter", filterQuery);
     }
 
-    // Si se ha especificado un select, se añade al query string
-    /*if (select) {
-        query.append("$select", select);
-    }*/
-
     const queryString = query.toString();
 
     try {

@@ -153,8 +153,6 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
      
         navigate(UPDATE_INVOICE, { state: { invoiceId: invoiceIdRespnse } });
       }
-
-      console.log('Datos enviados:', JSON.stringify(formattedInvoice, null, 2));
     },
   });
 
