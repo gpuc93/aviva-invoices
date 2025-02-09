@@ -38,7 +38,7 @@ const CustomerDialog: React.FC<CustomerDialogProps> = ({ open, onClose, customer
   
 
   const filteredCustomers = customers.filter(customer =>
-    `${customer.name} ${customer.lastName}`.toLowerCase().includes(search.toLowerCase())
+    `${customer.name} ${customer.lastName} ${customer.phone} ${customer.address}`.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleSelectItem = (customer: Customer) => {
@@ -51,7 +51,7 @@ const CustomerDialog: React.FC<CustomerDialogProps> = ({ open, onClose, customer
       <DialogTitle sx={{ cursor: 'move', fontSize: "14px", fontWeight: "bold", padding: "15px", paddingBottom: "10px" }} id="draggable-dialog-title">
         Clientes
       </DialogTitle>
-      <DialogContent sx={{padding: "15px"}}>
+      <DialogContent sx={{padding: "15px", minHeight: "300px", minWidth: "320px"}}>
         <TextField
         className='dialog__search--input'
           fullWidth
@@ -79,7 +79,7 @@ const CustomerDialog: React.FC<CustomerDialogProps> = ({ open, onClose, customer
           ))}
         </List>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{paddingBottom: "15px"}}>
         <Button color="secondary" variant="contained" onClick={onClose}>Cancelar</Button>
       </DialogActions>
     </Dialog>
