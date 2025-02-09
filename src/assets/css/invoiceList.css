@@ -1,3 +1,8 @@
+.invli--container {
+    box-shadow: rgba(73, 73, 73, 0.1) 0px 4px 12px !important;
+    border-radius: 16px !important;
+}
+
 
 .invli__profile--cell {
     display: flex !important;
@@ -53,6 +58,15 @@
     color: #9eaab5 !important;
 }
 
+.invli__table--container th {
+    color: #7f8d98;
+    font-weight: bold;
+}
+
+.invli__table--container td {
+    border-bottom: 1px solid rgb(224 224 224 / 33%);
+}
+
 .invli__filter--content {
     display: flex;
     align-items: center;
@@ -65,8 +79,8 @@
 }
 
 .invli__filter--btn {
-    min-width: 157px !important;
-    max-width: 157px !important;
+    min-width: 170px !important;
+    max-width: 170px !important;
     margin: 0 !important;
 }
 

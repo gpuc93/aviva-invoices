@@ -12,6 +12,7 @@ import {
   TextField,
   Divider,
   InputAdornment,
+  Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -57,7 +58,15 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
           <FieldArray name="details">
             {({ push, remove }) => (
               <>
-                {formik.values.details.map((item: any, index: number) => {
+              
+              {formik.values.details.length === 0 && (
+                  <Typography width="100%" color="error">
+                    Debes tener al menos un registro para guardar la factura
+                  </Typography>
+                )}
+
+                {
+                formik.values.details.map((item: any, index: number) => {
                     const total = (item.quantity * item.price).toFixed(2);
                     
                   return (
@@ -69,7 +78,7 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
                       <TableCell sx={{ border: 'none' }}>
                         <FormikTextField multiline maxRows={4} size="small" name={`details.${index}.description`} label="Descripción" />
                       </TableCell>
-                      <TableCell sx={{ border: 'none' }}>
+                      <TableCell sx={{ border: 'none', flex: "none !important", width: 200 }}>
                         <FormikSelectField
                           id={`${index}`}
                           size="small"
@@ -78,13 +87,13 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
                           options={categoryServices}
                         />
                       </TableCell>
-                      <TableCell sx={{ border: 'none' }}>
+                      <TableCell sx={{ border: 'none', flex: "none !important", width: 100 }}>
                         <FormikTextField size="small" name={`details.${index}.quantity`} label="Cantidad" type="number" />
                       </TableCell>
-                      <TableCell sx={{ border: 'none' }}>
+                      <TableCell sx={{ border: 'none', flex: "none !important", width: 100 }}>
                         <FormikTextField size="small" name={`details.${index}.price`} label="Precio" isAmount type="number" />
                       </TableCell>
-                      <TableCell sx={{ border: 'none' }}>
+                      <TableCell sx={{ border: 'none', flex: "none !important", width: 160 }}>
                         <TextField label='Total' size="small" value={total} slotProps={{
                             input: {startAdornment: <InputAdornment className='invrow__adornment-disabled' position="start">$</InputAdornment>}
                         }} disabled />
@@ -100,8 +109,8 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
                     </TableRow>
                   </React.Fragment>
                   )
-})}
-<Divider 
+              })}
+              <Divider 
           orientation="horizontal"
                     sx={{
                       borderStyle: 'dashed',

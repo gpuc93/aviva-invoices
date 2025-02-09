@@ -185,7 +185,9 @@ const InvoiceList: React.FC = () => {
         if(!forced) {
             /**Validation to force the search when deleted an item */
             setPage(0);
-            setClearFilterAvailable(true)
+            if(statusFilter != '' || searchFilter != '' || startDateFilter != null || endDateFilter != null) {
+              setClearFilterAvailable(true)
+            }
         }
         setRowsPerPage(defaultRowsPerPage);
         setRefreshKey(prev => prev + 1);
@@ -210,7 +212,7 @@ const InvoiceList: React.FC = () => {
       </Button></Link>
       </div>  
     
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper className='invli--container' sx={{ width: '100%', overflow: 'hidden' }}>
     <div className='invli__filter--content'>
         
     <InvoiceFieldStatus id='filter-status-label' classNameInput='invli__filter--label' classNameBtn="invli__filter--btn" handleSelect={setStatusFilter} value={statusFilter} />
@@ -246,7 +248,7 @@ const InvoiceList: React.FC = () => {
       
       
     </div>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer className='invli__table--container' sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow key={9}>
@@ -415,7 +417,7 @@ interface SearchInputProps {
     value: string
   }
   
-  export const SearchInput: React.FC<SearchInputProps> = ({ onSearch, placeholder = "Buscar...", delay = 500, className, value }) => {
+  export const SearchInput: React.FC<SearchInputProps> = ({ onSearch, placeholder = "Buscar por cliente o número de factura...", delay = 500, className, value }) => {
     const [searchText, setSearchText] = React.useState("");
 
     React.useEffect(() => {

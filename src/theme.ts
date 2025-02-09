@@ -1,6 +1,9 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  shape: {
+    borderRadius: 8, // Border radius de todos los elementos
+  },
   palette: {
     error: {
       main: "#ff4920"
@@ -23,10 +26,11 @@ const theme = createTheme({
         },
       },
     },
+    
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: "10px", // Aplica border-radius al Dialog
+          borderRadius: "12px", // Aplica border-radius al Dialog
         },
       }
     }

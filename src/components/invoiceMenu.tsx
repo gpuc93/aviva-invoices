@@ -71,7 +71,15 @@ export default function InvoiceMenu({invoiceId, handleSearch}: InvoiceMenuProps)
         </Tooltip>
       </Box>
       <Menu
-
+      className='invmenu__menu--content'
+anchorOrigin={{
+  vertical: 'top',
+  horizontal: 'left',
+}}
+transformOrigin={{
+  vertical: 'center',
+  horizontal: 'right',
+}}
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
@@ -81,9 +89,11 @@ export default function InvoiceMenu({invoiceId, handleSearch}: InvoiceMenuProps)
           paper: {
             elevation: 0,
             sx: {
+              top: 50,
+              borderRadius: 2,
               overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
+              filter: 'drop-shadow(0px 2px 5px rgba(0,0,0,0.15))',
+              mt: 3.5,
               '& .MuiAvatar-root': {
                 width: 32,
                 height: 32,
@@ -94,46 +104,41 @@ export default function InvoiceMenu({invoiceId, handleSearch}: InvoiceMenuProps)
                 content: '""',
                 display: 'block',
                 position: 'absolute',
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
+                top: 27,
+                right: -5,
+                width: 20,
+                height: 20,
+                bgcolor: '#f9fdfd',
+                transform: 'translateY(-50%) rotate(135deg)',
                 zIndex: 0,
               },
             },
           },
         }}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Link to={UPDATE_INVOICE} state={{ invoiceId }}>
-        <MenuItem onClick={handleClose}>
-        
 
+      >
+        
+        
+          <Link to={UPDATE_INVOICE} state={{ invoiceId }}>
+          <MenuItem className='invmenu__item invmenu__item--edit' color='black'>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
           Editar
-         
-        </MenuItem>
-        </Link>
+          </MenuItem>
+         </Link>
+        
+        
         <Divider 
           sx={{
             borderStyle: 'dashed',
             borderColor: '#ebeaea',
             borderWidth: '1.9px',
-            borderTopWidth: "0"
+            borderTopWidth: "0",
+            margin: "0 !important"
           }}
         />
-        <MenuItem onClick={handleOpenDialogDelete}>
+        <MenuItem className='invmenu__item invmenu__item--delete' onClick={handleOpenDialogDelete}>
           <ListItemIcon>
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
@@ -161,29 +166,35 @@ export function DeleteDialog({open, handleClose, handleDelete}: DeleteDialogProp
   return (
     <React.Fragment>
       <Dialog
-      className='dfabadsfasudiucasfuhadshfuahdsfuiasihfdiuh'
       sx={{borderRadius: "10px"}}
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
+        <div className='dialog--component'>
+        <DialogTitle sx={{padding: 0, paddingBottom: "15px"}} id="responsive-dialog-title">
           {"Eliminar"}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{padding: 0,  paddingBottom: "15px"}}>
           <DialogContentText>
             Estas seguro de eliminar la factura?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus variant="contained" onClick={handleDelete}>
+        <DialogActions sx={{
+          display: "flex",
+          flexDirection: "row",
+          columnGap: "6px"
+        }}>
+          <Button color='error' autoFocus variant="contained" onClick={handleDelete}>
             Eliminar
           </Button>
-          <Button  variant="contained" color='error' onClick={handleClose} autoFocus>
+          <Button className='cancel--btn' variant="contained" onClick={handleClose} autoFocus>
             Cancelar
           </Button>
         </DialogActions>
+        </div>
+        
       </Dialog>
     </React.Fragment>
   );

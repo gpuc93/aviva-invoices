@@ -7,15 +7,11 @@ import { UPDATE_INVOICE } from "./utils/pathRoutes";
 function App() {
   return (
     <>
-    <div>
-
       <Routes>
         <Route path="/" element={<InvoiceList />} />
           <Route path="/create" element={<InvoiceForm />} />
           <Route path={`${UPDATE_INVOICE}`} element={<InvoiceForm editMode />} />
-        </Routes>
-    </div>
-      
+      </Routes>
     </>
   )
 }

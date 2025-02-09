@@ -1,3 +1,7 @@
+.invform--container {
+    box-shadow: rgba(73, 73, 73, 0.1) 0px 4px 12px !important;
+}
+
 .invform__field--date {
     width: 100%;
 }
@@ -5,6 +9,7 @@
 .invform__banner--titles {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 .invform__customer-selec--content {

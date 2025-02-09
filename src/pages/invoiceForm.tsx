@@ -82,7 +82,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
     if (editMode && invoiceId) {
       const fetchData = async () => {
         const invoiceResponse = await invoiceApi.getInvoice(invoiceId);
-        debugger
+        
         setInvoiceData(invoiceResponse);
       };
       fetchData();
@@ -145,7 +145,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
         await invoiceApi.updateInvoice(invoiceId, formattedInvoice);
       } else {
         const invoiceIdRespnse = await invoiceApi.createInvoice(formattedInvoice);
-        debugger
+     
         navigate(UPDATE_INVOICE, { state: { invoiceId: invoiceIdRespnse } });
       }
 
@@ -160,11 +160,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
   };
 
   const breadcrumbs = [
-    <Link key="1" color="inherit" to={INVOCE_LIST}>
-      Facturas
+    <Link key="1" color="red" to={INVOCE_LIST}>
+      <Typography key="3" sx={{ fontSize: '14px', color: 'black' }}>
+        Facturas
+      </Typography>
     </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Nueva factura
+    <Typography key="3" sx={{ fontSize: '14px', color: '#9eaac6' }}>
+      {(invoiceData && editMode) ? invoiceData.no : "Nueva factura"}
     </Typography>,
   ];
 
@@ -174,7 +176,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
           onSubmit={formik.handleSubmit}>
       <div className="banner--title invform__banner">
         <div className="invform__banner--titles">
-          <h1>Crear nueva factura</h1>
+          <h1>{editMode ? "Editar" : "Crear nueva factura"}</h1>
           <Stack spacing={2}>
             <Breadcrumbs separator="•" aria-label="breadcrumb">
               {breadcrumbs}
@@ -183,7 +185,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
         </div>
       </div>
 
-      <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px", borderRadius: "16px" }}>
+      <Paper className='invform--container' sx={{ width: '100%', overflow: 'hidden', borderRadius: "16px" }}>
         <div className="invform__customer-selec--content">
         {customers.length > 0 && (
     <>
@@ -276,7 +278,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
 
        <div className='invform__footer'>
           <Link key="1" color="inherit" to={INVOCE_LIST}>
-              <Button variant="contained" size='large' type="submit" sx={{ mt: 3, backgroundColor: "white", color: "black", fontWeight: "bold" }}>
+              <Button className='cancel--btn' variant="contained" size='large' type="submit" sx={{ mt: 3, fontWeight: "bold" }}>
                 {'Cancelar'}
               </Button>
             </Link>

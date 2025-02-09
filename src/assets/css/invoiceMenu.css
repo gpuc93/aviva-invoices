@@ -6,3 +6,42 @@
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
+
+.invmenu__menu--content ul {
+    padding: 7px 0;
+    padding: 7px 0;
+    background: #f9fdfd;
+    border-radius: 16px;
+}
+
+.invmenu__item {
+    min-width: 150px;
+    padding: 4px 15px !important;
+}
+
+.invmenu__item a {
+    display: flex;
+}
+
+.invmenu__item--edit {
+    color: black !important;
+}
+
+.invmenu__item--edit :is(a,svg) {
+    color: black !important;
+}
+
+.invmenu__item--delete svg {
+    color: #ff4920 !important;
+}
+
+
+.invmenu__item--delete {
+    color: #ff4920 !important;
+}
+
+.dialog--component {
+    padding: 20px !important;
+    display: flex;
+    flex-direction: column;
+}

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "types": ["vitest"],
     "moduleResolution": "node",
-    "strict": true
+    "strict": true,
   },
   "files": [],
   "references": [
