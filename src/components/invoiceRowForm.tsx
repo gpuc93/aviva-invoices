@@ -122,7 +122,7 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
                   />
                 <TableRow>
                   <TableCell sx={{ border: 'none', paddingLeft: '15px' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Button
                         className="invrow__new-row--btn"
                         startIcon={<AddIcon />}
@@ -132,6 +132,11 @@ const InvoiceRowForm: React.FC<InvoiceRowFormProps> = ({ formik, onTotalsChange,
                       >
                         Nuevo elemento
                       </Button>
+                      <div className='invrow__discount'>
+                      <FormikTextField size="small" name="shipping" label='Shipping' type="number" />
+                      <FormikTextField size="small" name="discount" label='Discount' type="number" />
+                      <FormikTextField size="small" name="taxes" label='Taxes' type="number" />                      
+                      </div>
                     </Box>
                   </TableCell>
                 </TableRow>

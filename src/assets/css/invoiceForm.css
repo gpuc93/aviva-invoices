@@ -80,6 +80,10 @@
     flex: 1;
 }
 
+.invform__total--amount.discount {
+    color: #ff4920;
+}
+
 .invform__total--amount {
     display: flex;
     justify-content: flex-end;

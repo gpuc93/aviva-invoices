@@ -37,3 +37,9 @@
     font-weight: bold !important;
     font-size: 15px;
 }
+
+.invrow__discount {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
