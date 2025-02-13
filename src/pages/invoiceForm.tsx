@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as yup from 'yup';
-import { FormikProvider, useFormik } from 'formik';
+import { FormikProvider, useField, useFormik, useFormikContext } from 'formik';
 import '../assets/css/invoiceForm.css';
 import '../assets/css/invoiceFieldStatus.css';
 import { Button, Box, Paper, Breadcrumbs, Stack, Typography, Divider } from '@mui/material';
@@ -25,6 +25,9 @@ interface FormValues {
   creationTime: Dayjs | null;
   dueDateTime: Dayjs | null;
   details: InvoiceDetail[];
+  shipping: number;
+  discount: number;
+  taxes: number;
 }
 
 const validationSchema = yup.object().shape({
@@ -59,6 +62,7 @@ const validationSchema = yup.object().shape({
 });
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
+
   const location = useLocation();
   const invoiceId = location.state?.invoiceId;
   const navigate = useNavigate();
@@ -126,6 +130,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      debugger
+      console.log(JSON.stringify(values))
       const { no, creationTime, ...dataToSend } = values;
 
       const formattedInvoice: Partial<InvoiceCreate> = {
@@ -257,8 +263,29 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ editMode }) => {
               <label className="invform__subtotal--amount"> ${subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</label>
             </div>
             <div className="invform__total--row">
-            <label className="invform__total--lbl">Total</label>
-            <label className="invform__total--amount"> ${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</label>
+              <label className="invform__subtotal--lbl">Envio</label>
+              <label className="invform__total--amount">${formik.values.shipping}</label>
+            </div>
+            <div className="invform__total--row">
+              <label className="invform__subtotal--lbl">Descuentos</label>
+              <label className="invform__total--amount discount">-${formik.values.discount}</label>
+            </div>
+            <div className="invform__total--row">
+              <label className="invform__subtotal--lbl">Impuestos</label>
+              <label className="invform__total--amount">${formik.values.taxes}</label>
+            </div>
+            <div className="invform__total--row">
+              <label className="invform__total--lbl">Total</label>
+              <label className="invform__total--amount">
+  {(
+    (Number(total) || 0) + 
+    (Number(formik.values.shipping) || 0) + 
+    (Number(formik.values.taxes) || 0) - 
+    (Number(formik.values.discount) || 0)
+  ).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+</label>
+
+
             </div>
           </div>
 
